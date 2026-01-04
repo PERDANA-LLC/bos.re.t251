@@ -495,6 +495,61 @@
                 </div>
             </div>
         </div>
+
+        <!-- Flywheel Revenue Calculator (Analysis-2) -->
+        <div class="calculator-container arbitrage-container">
+            <h2 style="margin-bottom: 20px; color: var(--accent-secondary); text-align: center;">Flywheel Projections
+            </h2>
+
+            <div class="input-group">
+                <label>NAR Compliance Pkg <span class="badge"
+                        style="background: rgba(112, 0, 255, 0.1); color: var(--accent-secondary);">~$350
+                        Margin</span></label>
+                <div class="input-wrapper">
+                    <input type="number" id="nar-qty" placeholder="0" min="0" oninput="calculateFlywheel()">
+                    <span class="unit">sales</span>
+                </div>
+                <div class="subtext">One-time Revenue</div>
+            </div>
+
+            <div class="input-group">
+                <label>Follow-Up AI <span class="badge"
+                        style="background: rgba(112, 0, 255, 0.1); color: var(--accent-secondary);">~$220/mo
+                        MRR</span></label>
+                <div class="input-wrapper">
+                    <input type="number" id="ai-qty" placeholder="0" min="0" oninput="calculateFlywheel()">
+                    <span class="unit">clients</span>
+                </div>
+                <div class="subtext">Monthly Recurring</div>
+            </div>
+
+            <div class="input-group">
+                <label>Vol. Staging <span class="badge"
+                        style="background: rgba(112, 0, 255, 0.1); color: var(--accent-secondary);">~$35
+                        Margin</span></label>
+                <div class="input-wrapper">
+                    <input type="number" id="vol-staging-qty" placeholder="0" min="0" oninput="calculateFlywheel()">
+                    <span class="unit">units</span>
+                </div>
+                <div class="subtext">High Volume</div>
+            </div>
+
+            <div class="results-box">
+                <div class="result-row">
+                    <span>One-Time Profit</span>
+                    <span id="flywheel-onetime" class="money">$0</span>
+                </div>
+                <div class="result-row">
+                    <span>Monthly Recurring Profit</span>
+                    <span id="flywheel-mrr" class="money">$0</span>
+                </div>
+                <div class="divider"></div>
+                <div class="result-row profit" style="color: var(--accent-secondary);">
+                    <span>Total 12-Mo Value</span>
+                    <span id="flywheel-total" class="money">$0</span>
+                </div>
+            </div>
+        </div>
     </main>
 
     <footer>
@@ -639,6 +694,30 @@
 
         function formatMoney(amount) {
             return '$' + amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
+        // --- Flywheel Calculator Logic ---
+        function calculateFlywheel() {
+            // Margins (based on Analysis-2.html)
+            const margins = {
+                nar: 350,      // One-time
+                ai: 220,       // MRR
+                staging: 35    // One-time (though high volume)
+            };
+
+            const narQty = parseFloat(document.getElementById('nar-qty').value) || 0;
+            const aiQty = parseFloat(document.getElementById('ai-qty').value) || 0;
+            const stagingQty = parseFloat(document.getElementById('vol-staging-qty').value) || 0;
+
+            const onetimeProfit = (narQty * margins.nar) + (stagingQty * margins.staging);
+            const mrrProfit = (aiQty * margins.ai);
+
+            // 12 Month Value = One-time + (MRR * 12)
+            const totalValue = onetimeProfit + (mrrProfit * 12);
+
+            document.getElementById('flywheel-onetime').textContent = formatMoney(onetimeProfit);
+            document.getElementById('flywheel-mrr').textContent = formatMoney(mrrProfit);
+            document.getElementById('flywheel-total').textContent = formatMoney(totalValue);
         }
 
     </script>

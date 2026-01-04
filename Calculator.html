@@ -273,6 +273,109 @@
             background: rgba(255, 77, 77, 0.2);
         }
 
+        /* --- Arbitrage Calculator Styles --- */
+        .arbitrage-container {
+            margin-left: 40px;
+            min-width: 350px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: flex;
+            justify-content: space-between;
+            color: var(--text-main);
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+
+        .badge {
+            background: rgba(0, 242, 255, 0.1);
+            color: var(--accent);
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.7rem;
+        }
+
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-wrapper input {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 12px;
+            color: var(--text-main);
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .input-wrapper input:focus {
+            border-color: var(--accent);
+        }
+
+        .input-wrapper .unit {
+            position: absolute;
+            right: 15px;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+        }
+
+        .subtext {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 5px;
+            text-align: right;
+        }
+
+        .results-box {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 30px;
+        }
+
+        .result-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .result-row.profit {
+            color: var(--accent);
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-bottom: 0;
+        }
+
+        .divider {
+            height: 1px;
+            background: rgba(255, 255, 255, 0.1);
+            margin: 15px 0;
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 900px) {
+            main {
+                flex-direction: column;
+                gap: 40px;
+            }
+
+            .arbitrage-container {
+                margin-left: 0;
+                width: 100%;
+            }
+        }
+
         /* Mobile Responsiveness */
         @media (max-width: 768px) {
             .navbar {
@@ -342,6 +445,54 @@
                 <button onclick="appendNumber('.')">.</button>
                 <button onclick="appendNumber('0')">0</button>
                 <button class="btn-eq" onclick="calculate()">=</button>
+            </div>
+        </div>
+
+        <!-- Arbitrage Profit Calculator -->
+        <div class="calculator-container arbitrage-container">
+            <h2 style="margin-bottom: 20px; color: var(--accent); text-align: center;">Arbitrage Simulator</h2>
+
+            <div class="input-group">
+                <label>Virtual Staging <span class="badge">~70% Margin</span></label>
+                <div class="input-wrapper">
+                    <input type="number" id="staging-qty" placeholder="0" min="0" oninput="calculateArbitrage()">
+                    <span class="unit">units</span>
+                </div>
+                <div class="subtext">US: $90 | Cost: $25</div>
+            </div>
+
+            <div class="input-group">
+                <label>Video Editing <span class="badge">~65% Margin</span></label>
+                <div class="input-wrapper">
+                    <input type="number" id="editing-qty" placeholder="0" min="0" oninput="calculateArbitrage()">
+                    <span class="unit">units</span>
+                </div>
+                <div class="subtext">US: $125 | Cost: $45</div>
+            </div>
+
+            <div class="input-group">
+                <label>ISA Management <span class="badge">Hourly</span></label>
+                <div class="input-wrapper">
+                    <input type="number" id="isa-hours" placeholder="0" min="0" oninput="calculateArbitrage()">
+                    <span class="unit">hours</span>
+                </div>
+                <div class="subtext">US: $25/hr | Cost: $10/hr</div>
+            </div>
+
+            <div class="results-box">
+                <div class="result-row">
+                    <span>Gross Revenue</span>
+                    <span id="total-revenue" class="money">$0</span>
+                </div>
+                <div class="result-row">
+                    <span>Total Cost</span>
+                    <span id="total-cost" class="money">$0</span>
+                </div>
+                <div class="divider"></div>
+                <div class="result-row profit">
+                    <span>Est. Net Profit</span>
+                    <span id="net-profit" class="money">$0</span>
+                </div>
             </div>
         </div>
     </main>
@@ -448,6 +599,47 @@
             if (e.key === 'Escape') clearDisplay();
             if (e.key === '+' || e.key === '-' || e.key === '*' || e.key === '/') appendOperator(e.key);
         });
+
+        // --- Arbitrage Calculator Logic ---
+        function calculateArbitrage() {
+            // Metrics (based on Analysis-1.html)
+            const metrics = {
+                staging: { us: 90, cost: 25 },
+                editing: { us: 125, cost: 45 },
+                isa: { us: 25, cost: 10 }
+            };
+
+            // Inputs
+            const stagingQty = parseFloat(document.getElementById('staging-qty').value) || 0;
+            const editingQty = parseFloat(document.getElementById('editing-qty').value) || 0;
+            const isaHours = parseFloat(document.getElementById('isa-hours').value) || 0;
+
+            // Calculations
+            const revenue = (stagingQty * metrics.staging.us) +
+                (editingQty * metrics.editing.us) +
+                (isaHours * metrics.isa.us);
+
+            const cost = (stagingQty * metrics.staging.cost) +
+                (editingQty * metrics.editing.cost) +
+                (isaHours * metrics.isa.cost);
+
+            const profit = revenue - cost;
+
+            // Update UI
+            document.getElementById('total-revenue').textContent = formatMoney(revenue);
+            document.getElementById('total-cost').textContent = formatMoney(cost);
+            document.getElementById('net-profit').textContent = formatMoney(profit);
+
+            // Dynamic color for profit
+            const profitEl = document.getElementById('net-profit');
+            if (profit > 0) profitEl.style.color = 'var(--accent)';
+            else if (profit < 0) profitEl.style.color = '#ff4d4d';
+            else profitEl.style.color = 'var(--text-main)';
+        }
+
+        function formatMoney(amount) {
+            return '$' + amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
 
     </script>
 </body>

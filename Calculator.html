@@ -550,6 +550,71 @@
                 </div>
             </div>
         </div>
+
+        <!-- Lead Conversion Gap Calculator (Analysis-3) -->
+        <div class="calculator-container arbitrage-container">
+            <h2 style="margin-bottom: 20px; color: #facc15; text-align: center;">Conversion Gap Analysis</h2>
+
+            <div class="input-group">
+                <label>Monthly Leads <span class="badge"
+                        style="background: rgba(250, 204, 21, 0.1); color: #facc15;">Volume</span></label>
+                <div class="input-wrapper">
+                    <input type="number" id="leads-qty" placeholder="100" value="100" min="0" oninput="calculateGap()">
+                    <span class="unit">leads</span>
+                </div>
+                <div class="subtext">From Zillow/Realtor.com</div>
+            </div>
+
+            <div class="input-group">
+                <label>Avg Commission <span class="badge"
+                        style="background: rgba(250, 204, 21, 0.1); color: #facc15;">Value</span></label>
+                <div class="input-wrapper">
+                    <input type="number" id="commission-val" placeholder="9000" value="9000" min="0"
+                        oninput="calculateGap()">
+                    <span class="unit">$</span>
+                </div>
+                <div class="subtext">Per closed deal</div>
+            </div>
+
+            <div class="input-group">
+                <label>Response Rate Gap <span class="badge"
+                        style="background: rgba(250, 204, 21, 0.1); color: #facc15;">Fixable</span></label>
+                <div
+                    style="display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 0.8rem; color: var(--text-muted);">
+                    <span>Current: 54%</span>
+                    <span>Target: 95%</span>
+                </div>
+                <div class="input-wrapper">
+                    <!-- Visual representation only, calculation uses fixed logic for simplicity or can be inputs -->
+                    <div
+                        style="width: 100%; height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; position: relative;">
+                        <div
+                            style="position: absolute; left: 0; width: 54%; height: 100%; background: #ff4d4d; border-radius: 3px 0 0 3px;">
+                        </div>
+                        <div
+                            style="position: absolute; left: 54%; width: 41%; height: 100%; background: #10b981; border-radius: 0 3px 3px 0;">
+                        </div>
+                    </div>
+                </div>
+                <div class="subtext" style="color: #10b981;">+41% Recovery Window</div>
+            </div>
+
+            <div class="results-box">
+                <div class="result-row">
+                    <span>Leads Recovered</span>
+                    <span id="leads-recovered" class="money" style="color: #facc15;">0</span>
+                </div>
+                <div class="result-row">
+                    <span>Est. Extra Deals</span>
+                    <span id="extra-deals" class="money">0</span>
+                </div>
+                <div class="divider"></div>
+                <div class="result-row profit" style="color: #facc15;">
+                    <span>Recovered Revenue</span>
+                    <span id="recovered-revenue" class="money">$0</span>
+                </div>
+            </div>
+        </div>
     </main>
 
     <footer>
@@ -719,6 +784,35 @@
             document.getElementById('flywheel-mrr').textContent = formatMoney(mrrProfit);
             document.getElementById('flywheel-total').textContent = formatMoney(totalValue);
         }
+
+        // --- Lead Conversion Gap Logic ---
+        function calculateGap() {
+            // Assumptions from Analysis-3
+            const currentRate = 0.54; // 54%
+            const targetRate = 0.95;  // 95%
+            const conversionFromContact = 0.055; // ~5.5% (Derived from 3 deals / 54 contacts)
+
+            const leads = parseFloat(document.getElementById('leads-qty').value) || 0;
+            const commission = parseFloat(document.getElementById('commission-val').value) || 0;
+
+            // Leads that are currently missed but could be contacted
+            const leadsRecovered = leads * (targetRate - currentRate);
+
+            // Extra deals from those recovered leads
+            const extraDeals = leadsRecovered * conversionFromContact;
+
+            // Extra Revenue
+            const recoveredRevenue = extraDeals * commission;
+
+            document.getElementById('leads-recovered').textContent = Math.round(leadsRecovered);
+            document.getElementById('extra-deals').textContent = extraDeals.toFixed(1);
+            document.getElementById('recovered-revenue').textContent = formatMoney(recoveredRevenue);
+        }
+
+        // Initialize all calculators
+        calculateArbitrage();
+        calculateFlywheel();
+        calculateGap();
 
     </script>
 </body>

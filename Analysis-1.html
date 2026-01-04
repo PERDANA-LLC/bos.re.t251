@@ -1,0 +1,1038 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Zillow-Fiverr Arbitrage Protocol | Strategic Blueprint</title>
+    <meta name="description" content="Architecting a Scalable Drop Servicing Flywheel for the North American Real Estate Market. A comprehensive strategic framework.">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #0f172a; /* Slate 900 */
+            --primary-light: #1e293b; /* Slate 800 */
+            --accent: #10b981; /* Emerald 500 */
+            --accent-hover: #059669; /* Emerald 600 */
+            --text-dark: #334155; /* Slate 700 */
+            --text-light: #94a3b8; /* Slate 400 */
+            --bg-light: #f8fafc; /* Slate 50 */
+            --bg-white: #ffffff;
+            --border: #e2e8f0;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+            --font-main: 'Inter', sans-serif;
+            --font-serif: 'Playfair Display', serif;
+        }
+
+        /* Reset & Base */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-main);
+            color: var(--text-dark);
+            background-color: var(--bg-light);
+            line-height: 1.6;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+            transition: color 0.2s;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        img {
+            max-width: 100%;
+            display: block;
+        }
+
+        /* Utilities */
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .text-center { text-align: center; }
+        .text-accent { color: var(--accent); }
+        .mb-1 { margin-bottom: 0.5rem; }
+        .mb-2 { margin-bottom: 1rem; }
+        .mb-4 { margin-bottom: 2rem; }
+        .py-4 { padding-top: 4rem; padding-bottom: 4rem; }
+        
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+        }
+
+        .btn-primary {
+            background-color: var(--accent);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--accent-hover);
+            transform: translateY(-1px);
+        }
+
+        .btn-outline {
+            border: 2px solid var(--accent);
+            color: var(--accent);
+            background: transparent;
+        }
+
+        .btn-outline:hover {
+            background-color: var(--accent);
+            color: white;
+        }
+
+        /* Navigation */
+        header {
+            background-color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid var(--border);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+        }
+
+        .logo {
+            font-weight: 800;
+            font-size: 1.25rem;
+            color: var(--primary);
+            letter-spacing: -0.02em;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--primary-light);
+        }
+
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding-top: 140px;
+            padding-bottom: 80px;
+            background: linear-gradient(to bottom, #0f172a, #1e293b);
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 50%;
+            height: 100%;
+            background-image: url('https://picsum.photos/seed/architecture/800/1000');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.2;
+            mask-image: linear-gradient(to right, transparent, black);
+            -webkit-mask-image: linear-gradient(to right, transparent, black);
+        }
+
+        .hero-content {
+            position: relative;
+            max-width: 700px;
+        }
+
+        .hero h1 {
+            font-family: var(--font-serif);
+            font-size: 3.5rem;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero p {
+            font-size: 1.125rem;
+            color: var(--text-light);
+            margin-bottom: 2rem;
+            max-width: 600px;
+        }
+
+        /* Section Styling */
+        section {
+            padding: 5rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .section-title {
+            font-family: var(--font-serif);
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: var(--text-dark);
+            max-width: 700px;
+            margin: 0 auto 3rem auto;
+            font-size: 1.1rem;
+        }
+
+        /* Executive Summary Grid */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .card-stats {
+            background: var(--bg-white);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border);
+        }
+
+        /* Table Styling */
+        .table-wrapper {
+            overflow-x: auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: var(--shadow-md);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 600px;
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            background-color: var(--primary);
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:last-child td { border-bottom: none; }
+        tr:hover { background-color: #f1f5f9; }
+
+        /* Flywheel Diagram */
+        .flywheel-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+
+        .flywheel-step {
+            background: white;
+            padding: 2rem;
+            border-radius: 50%;
+            width: 250px;
+            height: 250px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            box-shadow: var(--shadow-lg);
+            border: 2px solid var(--accent);
+            position: relative;
+            transition: transform 0.3s;
+        }
+
+        .flywheel-step:hover {
+            transform: scale(1.05);
+        }
+
+        .flywheel-arrow {
+            font-size: 2rem;
+            color: var(--accent);
+        }
+
+        /* Persona Section */
+        .persona-box {
+            background: #e0f2fe;
+            padding: 2rem;
+            border-radius: 12px;
+            border-left: 5px solid #0284c7;
+        }
+
+        .pain-points {
+            margin-top: 1.5rem;
+            display: grid;
+            gap: 1rem;
+        }
+
+        .pain-point {
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .icon-box {
+            background: #fee2e2;
+            color: #ef4444;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        /* Product Cards */
+        .sku-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .sku-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s ease;
+            border: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sku-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--accent);
+        }
+
+        .sku-header {
+            background: var(--primary);
+            color: white;
+            padding: 1.5rem;
+        }
+
+        .sku-body {
+            padding: 1.5rem;
+            flex-grow: 1;
+        }
+
+        .sku-footer {
+            padding: 1.5rem;
+            background: #f8fafc;
+            border-top: 1px solid var(--border);
+        }
+
+        .check-list li {
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .check-list li::before {
+            content: '✓';
+            color: var(--accent);
+            font-weight: bold;
+        }
+
+        /* Tech Stack (Dark Mode Section) */
+        .tech-section {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .tech-section .section-title { color: white; }
+        .tech-section .section-subtitle { color: var(--text-light); }
+
+        .tech-flow {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            background: rgba(255,255,255,0.05);
+            padding: 2rem;
+            border-radius: 12px;
+            margin-top: 2rem;
+        }
+
+        .tech-node {
+            background: var(--primary-light);
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+            flex: 1;
+            min-width: 200px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .tech-node h4 { color: var(--accent); margin-bottom: 0.5rem; }
+
+        /* Scripts/Acquisition */
+        details {
+            background: white;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+        }
+
+        summary {
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            font-weight: 600;
+            background: #f8fafc;
+            list-style: none; /* Hide default triangle */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        summary::after {
+            content: '+';
+            font-size: 1.5rem;
+            color: var(--accent);
+        }
+
+        details[open] summary::after {
+            content: '-';
+        }
+
+        details[open] summary {
+            border-bottom: 1px solid var(--border);
+        }
+
+        .script-content {
+            padding: 1.5rem;
+            background: white;
+            font-family: monospace;
+            white-space: pre-line;
+            color: var(--text-dark);
+        }
+
+        /* Pricing Table */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            align-items: start;
+        }
+
+        .pricing-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .pricing-card.featured {
+            border: 2px solid var(--accent);
+            transform: scale(1.05);
+            position: relative;
+        }
+
+        .price {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin: 1rem 0;
+        }
+
+        .price span { font-size: 1rem; color: var(--text-light); font-weight: 400; }
+
+        /* Footer */
+        footer {
+            background: var(--primary);
+            color: white;
+            padding: 4rem 0 2rem 0;
+            text-align: center;
+        }
+
+        .footer-logo {
+            font-family: var(--font-serif);
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-links a {
+            color: var(--text-light);
+            margin: 0 1rem;
+            font-size: 0.9rem;
+        }
+
+        .footer-links a:hover { color: white; }
+
+        .copyright {
+            margin-top: 3rem;
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+            .grid-2 { grid-template-columns: 1fr; }
+            .flywheel-container { flex-direction: column; }
+            .flywheel-arrow { transform: rotate(90deg); }
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 70px;
+                left: 0;
+                width: 100%;
+                background: white;
+                flex-direction: column;
+                padding: 1rem;
+                border-bottom: 1px solid var(--border);
+            }
+            .nav-links.active { display: flex; }
+            .menu-toggle { display: block; }
+            .pricing-card.featured { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">ZF Arbitrage</div>
+                <button class="menu-toggle" aria-label="Toggle navigation">☰</button>
+                <div class="nav-links">
+                    <a href="#thesis">Thesis</a>
+                    <a href="#flywheel">The Flywheel</a>
+                    <a href="#products">SKUs</a>
+                    <a href="#tech">Tech Stack</a>
+                    <a href="#finance">Finance</a>
+                    <a href="#acquisition" class="btn btn-primary" style="padding: 0.5rem 1rem;">Start</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="container">
+                <div class="hero-content">
+                    <span class="text-accent" style="font-weight: 600; letter-spacing: 1px; text-transform: uppercase;">Executive Report</span>
+                    <h1>The Zillow-Fiverr Arbitrage Protocol</h1>
+                    <p>Architecting a scalable drop servicing flywheel for the North American Real Estate Market. Transform global talent arbitrage into a passive income engine.</p>
+                    <div style="display: flex; gap: 1rem;">
+                        <a href="#thesis" class="btn btn-primary">Read the Blueprint</a>
+                        <a href="#products" class="btn btn-outline" style="border-color: rgba(255,255,255,0.3); color: white;">View SKUs</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Executive Summary / Thesis -->
+        <section id="thesis">
+            <div class="container">
+                <h2 class="section-title">The Macro-Economic Thesis</h2>
+                <p class="section-subtitle">The intersection of the decentralized gig economy and high-stakes real estate presents a profound arbitrage opportunity.</p>
+                
+                <div class="grid-2">
+                    <div>
+                        <h3 class="mb-2">The Commission Compression Crisis</h3>
+                        <p class="mb-4">North American real estate agents face rising operational costs and marketing saturation. They are expected to be multimedia broadcasters, yet their skillset is orthogonal to closing deals. This creates a <strong>"Value Gap"</strong> where agents pay premiums to reclaim their time.</p>
+                        
+                        <h3 class="mb-2">Global Labor Arbitrage</h3>
+                        <p>By acting as the architect and quality guarantor, a drop servicing agency creates a value layer that transforms commoditized freelance tasks into premium solutions.</p>
+                    </div>
+                    <div class="card-stats">
+                        <h4 class="text-center mb-2">Table 1.1: Arbitrage Value Matrix</h4>
+                        <div class="table-wrapper">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Service Category</th>
+                                        <th>US Cost</th>
+                                        <th>Fiverr Cost</th>
+                                        <th>Margin</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>Virtual Staging</strong></td>
+                                        <td>$80 - $100</td>
+                                        <td>$20 - $30</td>
+                                        <td class="text-accent">~70%</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Video Editing</strong></td>
+                                        <td>$100 - $150</td>
+                                        <td>$30 - $60</td>
+                                        <td class="text-accent">~60-80%</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Lead Qual (ISA)</strong></td>
+                                        <td>$3,000/mo</td>
+                                        <td>$7 - $15/hr</td>
+                                        <td class="text-accent">~50-60%</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Listing Maint.</strong></td>
+                                        <td>$40k/yr (Admin)</td>
+                                        <td>$299/mo Sub</td>
+                                        <td class="text-accent">Recurring</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- The Flywheel -->
+        <section id="flywheel" style="background-color: #f1f5f9;">
+            <div class="container">
+                <h2 class="section-title">The Flywheel vs. The Funnel</h2>
+                <p class="section-subtitle">Traditional agencies pour leads into a funnel and restart. We build a self-reinforcing loop.</p>
+
+                <div class="flywheel-container">
+                    <div class="flywheel-step">
+                        <div style="font-size: 2rem; margin-bottom: 1rem;">🧲</div>
+                        <h3>Attract</h3>
+                        <p>Low-friction visual offers (Virtual Staging) bring agents into the ecosystem.</p>
+                    </div>
+                    
+                    <div class="flywheel-arrow">➔</div>
+
+                    <div class="flywheel-step">
+                        <div style="font-size: 2rem; margin-bottom: 1rem;">⚙️</div>
+                        <h3>Engage</h3>
+                        <p>Frictionless portals and "overnight" delivery via global timezones create delight.</p>
+                    </div>
+
+                    <div class="flywheel-arrow">➔</div>
+
+                    <div class="flywheel-step">
+                        <div style="font-size: 2rem; margin-bottom: 1rem;">❤️</div>
+                        <h3>Delight</h3>
+                        <p>Consistency and recurring maintenance turn agents into promoters.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Persona -->
+        <section id="persona">
+            <div class="container">
+                <div class="grid-2">
+                    <div>
+                        <img src="https://picsum.photos/seed/realtor/600/400" alt="Real Estate Agent" style="border-radius: 12px; box-shadow: var(--shadow-md);">
+                    </div>
+                    <div>
+                        <h2 class="section-title" style="text-align: left;">The Client Persona</h2>
+                        <h3 class="mb-2">The Zillow Premier Agent (ZPA)</h3>
+                        <p>These are high-volume professionals spending thousands monthly on leads. They don't want another login; they want a partner to offload the "Media Company" burden.</p>
+                        
+                        <div class="persona-box">
+                            <h4>Top Pain Points</h4>
+                            <div class="pain-points">
+                                <div class="pain-point">
+                                    <div class="icon-box">⚡</div>
+                                    <div>
+                                        <strong>Speed to Lead</strong>
+                                        <p style="font-size: 0.9rem;">Missing the 5-minute window costs them conversions.</p>
+                                    </div>
+                                </div>
+                                <div class="pain-point">
+                                    <div class="icon-box">📉</div>
+                                    <div>
+                                        <strong>Listing Stagnation</strong>
+                                        <p style="font-size: 0.9rem;">Panic sets in after 14 days without fresh content.</p>
+                                    </div>
+                                </div>
+                                <div class="pain-point">
+                                    <div class="icon-box">🎬</div>
+                                    <div>
+                                        <strong>Content Treadmill</strong>
+                                        <p style="font-size: 0.9rem;">Raw footage exists, but no time to edit for Reels/TikTok.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Productized Services -->
+        <section id="products" style="background-color: var(--bg-white);">
+            <div class="container">
+                <h2 class="section-title">Productized Service Architecture</h2>
+                <p class="section-subtitle">Scalability is impossible with custom work. We define fixed scope, fixed price, fixed timeline SKUs.</p>
+
+                <div class="sku-grid">
+                    <!-- SKU A -->
+                    <div class="sku-card">
+                        <div class="sku-header">
+                            <h3>SKU A: Visual Assets</h3>
+                            <p style="opacity: 0.9; font-size: 0.9rem;">The Acquisition Hook</p>
+                        </div>
+                        <div class="sku-body">
+                            <img src="https://picsum.photos/seed/livingroom/400/250" alt="Virtual Staging" style="width:100%; border-radius: 6px; margin-bottom: 1rem;">
+                            <p class="mb-2"><strong>Product:</strong> Virtual Staging & Renovation.</p>
+                            <p class="mb-4">Transform vacant photos into "Modern Farmhouse" or luxury styles instantly.</p>
+                            <ul class="check-list">
+                                <li>High-res Photorealism</li>
+                                <li>24hr Turnaround</li>
+                                <li>~70% Margin</li>
+                            </ul>
+                        </div>
+                        <div class="sku-footer">
+                            <span style="font-weight: 700; color: var(--primary);">$45 - $50 / photo</span>
+                        </div>
+                    </div>
+
+                    <!-- SKU B -->
+                    <div class="sku-card">
+                        <div class="sku-header" style="background-color: var(--primary-light);">
+                            <h3>SKU B: Content Engine</h3>
+                            <p style="opacity: 0.9; font-size: 0.9rem;">The Recurring Retainer</p>
+                        </div>
+                        <div class="sku-body">
+                            <img src="https://picsum.photos/seed/videoediting/400/250" alt="Video Editing" style="width:100%; border-radius: 6px; margin-bottom: 1rem;">
+                            <p class="mb-2"><strong>Product:</strong> Vertical Video Subscription.</p>
+                            <p class="mb-4">Weekly Reels/Shorts with captions, trending audio, and branding.</p>
+                            <ul class="check-list">
+                                <li>Monthly Recurring Rev</li>
+                                <li>Solves Consistency Problem</li>
+                                <li>High "Stickiness"</li>
+                            </ul>
+                        </div>
+                        <div class="sku-footer">
+                            <span style="font-weight: 700; color: var(--primary);">$599 / month</span>
+                        </div>
+                    </div>
+
+                    <!-- SKU C -->
+                    <div class="sku-card">
+                        <div class="sku-header">
+                            <h3>SKU C: Growth Infra</h3>
+                            <p style="opacity: 0.9; font-size: 0.9rem;">The Retention Layer</p>
+                        </div>
+                        <div class="sku-body">
+                            <img src="https://picsum.photos/seed/phonecall/400/250" alt="Lead Management" style="width:100%; border-radius: 6px; margin-bottom: 1rem;">
+                            <p class="mb-2"><strong>Product:</strong> Lead Qual & Listing Maint.</p>
+                            <p class="mb-4">ISA calling leads within 5 mins and weekly seller updates.</p>
+                            <ul class="check-list">
+                                <li>High Switching Costs</li>
+                                <li>Embeds in Daily Workflow</li>
+                                <li>Operational Relief</li>
+                            </ul>
+                        </div>
+                        <div class="sku-footer">
+                            <span style="font-weight: 700; color: var(--primary);">Upsell / Add-on</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Supply Chain & Vetting -->
+        <section id="supply-chain">
+            <div class="container">
+                <div class="grid-2">
+                    <div>
+                        <h2 class="section-title" style="text-align: left;">Supply Chain Engineering</h2>
+                        <p class="mb-4">Fiverr is high-noise. We use a rigorous "Virtual Bench" protocol to find the signal.</p>
+                        
+                        <div style="margin-bottom: 2rem;">
+                            <h4 class="text-accent">The Vetting Matrix</h4>
+                            <div style="margin-left: 1rem; margin-top: 1rem; border-left: 2px solid var(--border); padding-left: 1rem;">
+                                <p><strong>Layer 1 (Identity):</strong> Reverse Image Search (Google Lens) to detect stolen portfolios.</p>
+                                <p><strong>Layer 2 (Literacy):</strong> The "Shibboleth" Test (Reply with "Blueberry").</p>
+                                <p><strong>Layer 3 (Technical):</strong> Check EXIF data for software usage.</p>
+                                <p><strong>Layer 4 (Speed):</strong> "Pressure Test" messages at various hours.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <img src="https://picsum.photos/seed/meeting/600/500" alt="Team Coordination" style="border-radius: 12px; box-shadow: var(--shadow-lg);">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tech Stack -->
+        <section id="tech" class="tech-section">
+            <div class="container">
+                <h2 class="section-title">The Headless Agency</h2>
+                <p class="section-subtitle">To scale to "Hero" status, the business must run on code, not manual labor.</p>
+
+                <div class="tech-flow">
+                    <div class="tech-node">
+                        <h4>Client Portal</h4>
+                        <p style="font-size: 0.9rem;">Service Provider Pro (SPP)</p>
+                        <p style="font-size: 0.8rem; margin-top: 0.5rem; opacity: 0.7;">White-labeled billing, ordering, & delivery.</p>
+                    </div>
+                    <div style="font-size: 1.5rem;">⇄</div>
+                    <div class="tech-node">
+                        <h4>Middleware</h4>
+                        <p style="font-size: 0.9rem;">Make.com</p>
+                        <p style="font-size: 0.8rem; margin-top: 0.5rem; opacity: 0.7;">Visual error handling & routing logic.</p>
+                    </div>
+                    <div style="font-size: 1.5rem;">⇄</div>
+                    <div class="tech-node">
+                        <h4>Backend</h4>
+                        <p style="font-size: 0.9rem;">Google Drive & Slack</p>
+                        <p style="font-size: 0.8rem; margin-top: 0.5rem; opacity: 0.7;">Asset storage & team notifications.</p>
+                    </div>
+                </div>
+
+                <div class="text-center" style="margin-top: 3rem;">
+                    <p><em>"The agent submits work at 6 PM EST; the freelancer works while the agent sleeps; the agent wakes up to completed work."</em></p>
+                    <p class="text-accent mt-1">The Overnight Magic Effect</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Acquisition Scripts -->
+        <section id="acquisition">
+            <div class="container">
+                <h2 class="section-title">Acquisition Systems</h2>
+                <p class="section-subtitle">Hunting the Zillow Premier Agent. High-conversion cold outreach frameworks.</p>
+
+                <div style="max-width: 800px; margin: 0 auto;">
+                    <details>
+                        <summary>Script A: The "Free Sample" (Staging)</summary>
+                        <div class="script-content">
+Subject: The living room at 123 Main St (Virtual Staging idea)
+
+Hi [Name],
+
+I noticed your listing at 123 Main St has been up for a bit. It’s a great property, but the vacant living room might be making it hard for buyers to visualize scale.
+
+I took the liberty of virtually staging one of the photos just to show you what it could look like. See attached.
+
+No charge, no strings. If you like it and want the rest of the rooms done, I can turn them around overnight. Let me know.
+                        </div>
+                    </details>
+
+                    <details>
+                        <summary>Script B: The "Video Asset" (Social Media)</summary>
+                        <div class="script-content">
+Subject: Reel for your open house
+
+Hi [Name],
+
+I saw your walkthrough of [Address] on Instagram. Great energy!
+
+I noticed you posted the raw footage. I actually run a small team that edits these into trending Reels with captions and music.
+
+I’d love to edit your next one for free to show you how much more engagement we can get you. Open to a 30-second test?
+                        </div>
+                    </details>
+                    
+                    <details>
+                        <summary>Script C: The "Zillow Lead" Re-engagement</summary>
+                        <div class="script-content">
+Subject: Old leads on [Address]
+
+Hi [Name],
+
+I will have my team call your old Zillow leads from 6 months ago to see if they are ready to buy now. 
+
+You only pay if we book an appointment for you.
+
+Interested in cleaning up your CRM?
+                        </div>
+                    </details>
+                </div>
+            </div>
+        </section>
+
+        <!-- Financials -->
+        <section id="finance" style="background-color: #f8fafc;">
+            <div class="container">
+                <h2 class="section-title">Financial Engineering</h2>
+                <p class="section-subtitle">Tiered pricing strategy to capture different market segments.</p>
+
+                <div class="pricing-grid">
+                    <!-- Tier 1 -->
+                    <div class="pricing-card">
+                        <h3>The Starter</h3>
+                        <p>Pay-As-You-Go</p>
+                        <div class="price">Market</div>
+                        <ul class="check-list" style="text-align: left; margin-bottom: 2rem;">
+                            <li>Virtual Staging ($45/photo)</li>
+                            <li>Video Editing ($79/reel)</li>
+                            <li>48hr Turnaround</li>
+                            <li>Ideal for New Agents</li>
+                        </ul>
+                        <button class="btn btn-outline" style="width: 100%">Standard Entry</button>
+                    </div>
+
+                    <!-- Tier 2 -->
+                    <div class="pricing-card featured">
+                        <div style="background: var(--accent); color: white; font-size: 0.8rem; padding: 4px; border-radius: 4px; display: inline-block; margin-bottom: 10px;">RECOMMENDED</div>
+                        <h3>The Producer</h3>
+                        <p>Monthly Retainer</p>
+                        <div class="price">$599<span>/mo</span></div>
+                        <ul class="check-list" style="text-align: left; margin-bottom: 2rem;">
+                            <li>4 Homes (20 photos) Staged</li>
+                            <li>8 Reels / month</li>
+                            <li>24hr Turnaround</li>
+                            <li>Listing Maint. Included</li>
+                        </ul>
+                        <button class="btn btn-primary" style="width: 100%">Best Value</button>
+                    </div>
+
+                    <!-- Tier 3 -->
+                    <div class="pricing-card">
+                        <h3>The Team</h3>
+                        <p>Enterprise</p>
+                        <div class="price">$1999<span>/mo</span></div>
+                        <ul class="check-list" style="text-align: left; margin-bottom: 2rem;">
+                            <li>Unlimited Staging</li>
+                            <li>20 Reels / mo</li>
+                            <li>Priority (12hr) Support</li>
+                            <li>10 Listings Maintained</li>
+                        </ul>
+                        <button class="btn btn-outline" style="width: 100%">For High Volume</button>
+                    </div>
+                </div>
+                
+                <div class="text-center mt-2">
+                    <p><strong>Target Churn Rate:</strong> &lt; 5% monthly. Use "Listing Maintenance" to increase stickiness.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Future & AI -->
+        <section id="future">
+            <div class="container">
+                <h2 class="section-title">2026 Vision & AI</h2>
+                <div class="grid-2">
+                    <div>
+                        <h3 class="mb-2">The Threat & Opportunity</h3>
+                        <p class="mb-2">AI tools (Virtual Staging AI, Auto-Editors) are getting better. <strong>Do not compete on "good enough."</strong></p>
+                        <p>Move upmarket. Luxury real estate needs "perfect"—complex video storytelling and high-end design that AI cannot yet mimic.</p>
+                    </div>
+                    <div>
+                        <h3 class="mb-2">Integrating AI</h3>
+                        <p>Use AI to <strong>augment margins</strong>, not replace service. Use AI to generate first drafts of listing descriptions or captions, then have a human polish them. This reduces labor time by 80%.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-logo">ZF Arbitrage</div>
+            <div class="footer-links">
+                <a href="#thesis">The Thesis</a>
+                <a href="#products">SKUs</a>
+                <a href="#acquisition">Scripts</a>
+                <a href="#finance">Pricing</a>
+            </div>
+            <p class="copyright">
+                &copy; 2025 Zillow-Fiverr Arbitrage Protocol. All Rights Reserved.<br>
+                <span style="opacity: 0.6; font-size: 0.7rem;">This is a strategic presentation website. Not legal or financial advice.</span>
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Simple Mobile Navigation Toggle
+        const menuToggle = document.querySelector('.menu-toggle');
+        const navLinks = document.querySelector('.nav-links');
+
+        menuToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+
+        // Close mobile menu when a link is clicked
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+            });
+        });
+
+        // Optional: Smooth reveal animation on scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = 1;
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+
+        // Apply fade-in animation to main sections
+        document.querySelectorAll('section').forEach(section => {
+            section.style.opacity = 0;
+            section.style.transform = 'translateY(20px)';
+            section.style.transition = 'all 0.6s ease-out';
+            observer.observe(section);
+        });
+    </script>
+</body>
+</html>

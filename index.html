@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics Dashboard | Dark Theme</title>
+    <style>
+        /* --- CSS Variables & Reset --- */
+        :root {
+            --bg-deep: #020024;
+            --bg-mid: #090979;
+            --bg-light: #00d4ff;
+            --accent: #00f2ff;
+            --accent-secondary: #7000ff;
+            --text-main: #ffffff;
+            --text-muted: #b0b0d0;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --nav-height: 70px;
+            --font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background: linear-gradient(135deg, var(--bg-deep) 0%, var(--bg-mid) 50%, #1c1c4e 100%);
+            color: var(--text-main);
+            overflow-x: hidden;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+            transition: color 0.3s ease;
+        }
+
+        /* --- Sticky Navigation --- */
+        .navbar {
+            position: sticky;
+            top: 0;
+            width: 100%;
+            height: var(--nav-height);
+            background: rgba(2, 0, 36, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--glass-border);
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 5%;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--accent), #ffffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 1px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-item {
+            position: relative;
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            padding: 5px 0;
+        }
+
+        .nav-item:hover {
+            color: var(--accent);
+        }
+
+        /* Underline animation */
+        .nav-item::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--accent);
+            transition: width 0.3s ease;
+        }
+
+        .nav-item:hover::after {
+            width: 100%;
+        }
+
+        /* --- Hero Section with Canvas Animation --- */
+        .hero {
+            position: relative;
+            height: 100vh; /* Full viewport height */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            overflow: hidden;
+            padding: 0 20px;
+        }
+
+        #hero-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            opacity: 0.6;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+            animation: fadeUp 1s ease-out;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            line-height: 1.2;
+            text-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            margin-bottom: 40px;
+        }
+
+        .btn-cta {
+            padding: 12px 30px;
+            background: linear-gradient(90deg, var(--accent-secondary), var(--bg-mid));
+            border: 1px solid var(--accent);
+            border-radius: 30px;
+            color: white;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 20px rgba(0, 242, 255, 0.4);
+        }
+
+        /* --- Common Section Styles --- */
+        section {
+            padding: 80px 10%;
+            position: relative;
+            z-index: 2;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            margin-bottom: 50px;
+            text-align: center;
+            position: relative;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .section-title::before {
+            content: '';
+            position: absolute;
+            width: 60px;
+            height: 4px;
+            background: var(--accent);
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 2px;
+        }
+
+        /* --- Animation Classes (Scroll Reveal) --- */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- Infographic Grid (Analysis 1 Preview) --- */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .stat-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 30px;
+            text-align: center;
+            transition: transform 0.3s ease, background 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        /* Circular Progress Animation */
+        .circle-chart {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 20px;
+            position: relative;
+        }
+
+        .circle-chart svg {
+            width: 100%;
+            height: 100%;
+            transform: rotate(-90deg);
+        }
+
+        .circle-bg {
+            fill: none;
+            stroke: rgba(255, 255, 255, 0.1);
+            stroke-width: 8;
+        }
+
+        .circle-progress {
+            fill: none;
+            stroke: var(--accent);
+            stroke-width: 8;
+            stroke-dasharray: 283; /* 2 * PI * 45 */
+            stroke-dashoffset: 283; /* Start empty */
+            stroke-linecap: round;
+            transition: stroke-dashoffset 1.5s ease-out;
+        }
+
+        .stat-value {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .stat-label {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* --- Bar Chart (Analysis 2 Preview) --- */
+        .chart-container {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 40px;
+            margin-top: 20px;
+        }
+
+        .bar-chart {
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-end;
+            height: 300px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .bar-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 10%;
+        }
+
+        .bar {
+            width: 100%;
+            background: linear-gradient(to top, var(--bg-mid), var(--accent));
+            border-radius: 4px 4px 0 0;
+            height: 0; /* Animate to height */
+            transition: height 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+            position: relative;
+        }
+
+        .bar:hover {
+            filter: brightness(1.2);
+        }
+
+        /* Tooltip on hover */
+        .bar::before {
+            content: attr(data-value);
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.8rem;
+            color: white;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .bar:hover::before {
+            opacity: 1;
+        }
+
+        .bar-label {
+            margin-top: 10px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* --- Interactive Cards (Analysis 3 Preview) --- */
+        .interactive-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .info-text h3 {
+            margin-bottom: 15px;
+            color: var(--accent);
+        }
+
+        .info-text p {
+            margin-bottom: 20px;
+            color: var(--text-muted);
+        }
+
+        .toggle-container {
+            display: flex;
+            gap: 15px;
+        }
+
+        .toggle-btn {
+            padding: 8px 16px;
+            background: transparent;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .toggle-btn.active {
+            background: var(--accent);
+            color: var(--bg-deep);
+        }
+
+        .graphic-display {
+            height: 200px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 16px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .wave {
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: rgba(0, 242, 255, 0.2);
+            border-radius: 40%;
+            top: 100%;
+            left: -50%;
+            transition: top 0.5s ease, background 0.5s;
+        }
+
+        /* States for interactive graphic */
+        .wave.state-1 { top: 40%; animation: rotate 6s infinite linear; }
+        .wave.state-2 { top: 60%; background: rgba(112, 0, 255, 0.3); animation: rotate 10s infinite linear reverse; }
+        
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* --- Footer --- */
+        footer {
+            background: rgba(2, 0, 36, 0.95);
+            padding: 40px 0;
+            text-align: center;
+            border-top: 1px solid var(--glass-border);
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        /* --- Animations Keyframes --- */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .navbar { padding: 0 20px; }
+            .nav-links { display: none; } /* Simplified for demo, ideally hamburger menu */
+            .hero h1 { font-size: 2.5rem; }
+            .interactive-grid { grid-template-columns: 1fr; }
+            .bar-group { width: 15%; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="logo">DataVision</div>
+        <div class="nav-links">
+            <a href="Analysis-1.html" class="nav-item">Analysis 1</a>
+            <a href="Analysis-2.html" class="nav-item">Analysis 2</a>
+            <a href="Analysis-3.html" class="nav-item">Analysis 3</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero">
+        <canvas id="hero-canvas"></canvas>
+        <div class="hero-content">
+            <h1>Deep Data Insights</h1>
+            <p>Experience the future of analytics with our real-time visualization engine.</p>
+            <a href="#overview" class="btn-cta">Explore Data</a>
+        </div>
+    </header>
+
+    <main>
+        <!-- Section: Overview (Infographics) -->
+        <section id="overview">
+            <h2 class="section-title reveal">Core Metrics</h2>
+            <div class="stats-grid">
+                <!-- Card 1 -->
+                <div class="stat-card reveal">
+                    <div class="circle-chart">
+                        <svg>
+                            <circle class="circle-bg" cx="60" cy="60" r="45"></circle>
+                            <circle class="circle-progress" data-percent="85" cx="60" cy="60" r="45"></circle>
+                        </svg>
+                        <div class="stat-value">0%</div>
+                    </div>
+                    <div class="stat-label">Efficiency</div>
+                </div>
+                <!-- Card 2 -->
+                <div class="stat-card reveal" style="transition-delay: 0.1s;">
+                    <div class="circle-chart">
+                        <svg>
+                            <circle class="circle-bg" cx="60" cy="60" r="45"></circle>
+                            <circle class="circle-progress" data-percent="62" cx="60" cy="60" r="45" style="stroke: var(--accent-secondary);"></circle>
+                        </svg>
+                        <div class="stat-value">0%</div>
+                    </div>
+                    <div class="stat-label">Retention</div>
+                </div>
+                <!-- Card 3 -->
+                <div class="stat-card reveal" style="transition-delay: 0.2s;">
+                    <div class="circle-chart">
+                        <svg>
+                            <circle class="circle-bg" cx="60" cy="60" r="45"></circle>
+                            <circle class="circle-progress" data-percent="94" cx="60" cy="60" r="45" style="stroke: #ff0055;"></circle>
+                        </svg>
+                        <div class="stat-value">0%</div>
+                    </div>
+                    <div class="stat-label">Accuracy</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section: Trend Analysis (Bar Charts) -->
+        <section id="trends">
+            <h2 class="section-title reveal">Performance Trends</h2>
+            <div class="chart-container reveal">
+                <div class="bar-chart">
+                    <div class="bar-group">
+                        <div class="bar" data-height="40%" data-value="40%"></div>
+                        <span class="bar-label">Q1</span>
+                    </div>
+                    <div class="bar-group">
+                        <div class="bar" data-height="65%" data-value="65%"></div>
+                        <span class="bar-label">Q2</span>
+                    </div>
+                    <div class="bar-group">
+                        <div class="bar" data-height="50%" data-value="50%"></div>
+                        <span class="bar-label">Q3</span>
+                    </div>
+                    <div class="bar-group">
+                        <div class="bar" data-height="85%" data-value="85%"></div>
+                        <span class="bar-label">Q4</span>
+                    </div>
+                    <div class="bar-group">
+                        <div class="bar" data-height="95%" data-value="95%"></div>
+                        <span class="bar-label">Proj</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section: Interactive Analysis -->
+        <section id="interactive">
+            <h2 class="section-title reveal">Simulation Mode</h2>
+            <div class="interactive-grid reveal">
+                <div class="info-text">
+                    <h3>Model Visualization</h3>
+                    <p>Switch between different data processing modes to visualize flow dynamics.</p>
+                    <div class="toggle-container">
+                        <button class="toggle-btn active" onclick="setMode(1)">Standard</button>
+                        <button class="toggle-btn" onclick="setMode(2)">Intensive</button>
+                    </div>
+                </div>
+                <div class="graphic-display">
+                    <div class="wave state-1" id="wave-graphic"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2023 DataVision Analytics. All rights reserved.</p>
+    </footer>
+
+    <script>
+        /**
+         * 1. Canvas Particle Network Animation
+         * Creates a constellation effect in the Hero section
+         */
+        const canvas = document.getElementById('hero-canvas');
+        const ctx = canvas.getContext('2d');
+        
+        let width, height;
+        let particles = [];
+        
+        // Configuration
+        const particleCount = 60;
+        const connectionDistance = 150;
+        const mouseDistance = 200;
+
+        // Resize handling
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        // Mouse tracking
+        const mouse = { x: null, y: null };
+        window.addEventListener('mousemove', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            mouse.x = e.clientX - rect.left;
+            mouse.y = e.clientY - rect.top;
+        });
+        window.addEventListener('mouseleave', () => {
+            mouse.x = null;
+            mouse.y = null;
+        });
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.vx = (Math.random() - 0.5) * 0.5; // Velocity X
+                this.vy = (Math.random() - 0.5) * 0.5; // Velocity Y
+                this.size = Math.random() * 2 + 1;
+                this.color = `rgba(0, 242, 255, ${Math.random() * 0.5 + 0.2})`;
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+
+                // Bounce off edges
+                if (this.x < 0 || this.x > width) this.vx *= -1;
+                if (this.y < 0 || this.y > height) this.vy *= -1;
+
+                // Mouse interaction
+                if (mouse.x != null) {
+                    let dx = mouse.x - this.x;
+                    let dy = mouse.y - this.y;
+                    let distance = Math.sqrt(dx * dx + dy * dy);
+                    if (distance < mouseDistance) {
+                        const forceDirectionX = dx / distance;
+                        const forceDirectionY = dy / distance;
+                        const force = (mouseDistance - distance) / mouseDistance;
+                        const directionX = forceDirectionX * force * 0.6; // push/pull factor
+                        const directionY = forceDirectionY * force * 0.6;
+                        this.vx -= directionX;
+                        this.vy -= directionY;
+                    }
+                }
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+            }
+        }
+
+        // Initialize particles
+        function initParticles() {
+            particles = [];
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        // Animation Loop
+        function animateCanvas() {
+            ctx.clearRect(0, 0, width, height);
+            
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+
+                // Draw connections
+                for (let j = i; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < connectionDistance) {
+                        ctx.beginPath();
+                        const opacity = 1 - (distance / connectionDistance);
+                        ctx.strokeStyle = `rgba(0, 212, 255, ${opacity * 0.4})`;
+                        ctx.lineWidth = 1;
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+            requestAnimationFrame(animateCanvas);
+        }
+
+        initParticles();
+        animateCanvas();
+
+        /**
+         * 2. Scroll Observer & Animations
+         * Triggers animations when elements scroll into view
+         */
+        const observerOptions = {
+            threshold: 0.2
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    
+                    // Specific Logic for Circular Charts
+                    if (entry.target.querySelector('.circle-progress')) {
+                        animateCircles(entry.target);
+                    }
+                    
+                    // Specific Logic for Bar Charts
+                    if (entry.target.querySelector('.bar')) {
+                        animateBars(entry.target);
+                    }
+
+                    // Stop observing once animated (optional)
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Animate Circular Progress
+        function animateCircles(container) {
+            const circles = container.querySelectorAll('.circle-progress');
+            circles.forEach(circle => {
+                const percent = circle.getAttribute('data-percent');
+                const circumference = 283; // 2 * PI * 45
+                const offset = circumference - (percent / 100) * circumference;
+                circle.style.strokeDashoffset = offset;
+
+                // Animate numbers
+                const valueDiv = circle.parentElement.nextElementSibling;
+                let start = 0;
+                const duration = 1500;
+                const startTime = performance.now();
+
+                function updateNumber(currentTime) {
+                    const elapsed = currentTime - startTime;
+                    const progress = Math.min(elapsed / duration, 1);
+                    
+                    // Ease out quart
+                    const ease = 1 - Math.pow(1 - progress, 4);
+                    
+                    const currentVal = Math.floor(start + (percent - start) * ease);
+                    valueDiv.textContent = currentVal + '%';
+
+                    if (progress < 1) {
+                        requestAnimationFrame(updateNumber);
+                    }
+                }
+                requestAnimationFrame(updateNumber);
+            });
+        }
+
+        // Animate Bar Chart Height
+        function animateBars(container) {
+            const bars = container.querySelectorAll('.bar');
+            bars.forEach(bar => {
+                const height = bar.getAttribute('data-height');
+                bar.style.height = height;
+            });
+        }
+
+        /**
+         * 3. Interactive Toggle Logic
+         */
+        function setMode(mode) {
+            const wave = document.getElementById('wave-graphic');
+            const buttons = document.querySelectorAll('.toggle-btn');
+
+            buttons.forEach(btn => btn.classList.remove('active'));
+            buttons[mode - 1].classList.add('active');
+
+            wave.className = 'wave'; // Reset
+            // Force reflow
+            void wave.offsetWidth; 
+            
+            if (mode === 1) {
+                wave.classList.add('state-1');
+            } else {
+                wave.classList.add('state-2');
+            }
+        }
+    </script>
+</body>
+</html>

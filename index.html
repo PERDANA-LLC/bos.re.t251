@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -104,7 +105,8 @@
         /* --- Hero Section with Canvas Animation --- */
         .hero {
             position: relative;
-            height: 100vh; /* Full viewport height */
+            height: 100vh;
+            /* Full viewport height */
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -247,8 +249,10 @@
             fill: none;
             stroke: var(--accent);
             stroke-width: 8;
-            stroke-dasharray: 283; /* 2 * PI * 45 */
-            stroke-dashoffset: 283; /* Start empty */
+            stroke-dasharray: 283;
+            /* 2 * PI * 45 */
+            stroke-dashoffset: 283;
+            /* Start empty */
             stroke-linecap: round;
             transition: stroke-dashoffset 1.5s ease-out;
         }
@@ -298,7 +302,8 @@
             width: 100%;
             background: linear-gradient(to top, var(--bg-mid), var(--accent));
             border-radius: 4px 4px 0 0;
-            height: 0; /* Animate to height */
+            height: 0;
+            /* Animate to height */
             transition: height 1.2s cubic-bezier(0.22, 1, 0.36, 1);
             position: relative;
         }
@@ -370,7 +375,7 @@
 
         .graphic-display {
             height: 200px;
-            background: rgba(0,0,0,0.2);
+            background: rgba(0, 0, 0, 0.2);
             border-radius: 16px;
             display: flex;
             justify-content: center;
@@ -391,12 +396,25 @@
         }
 
         /* States for interactive graphic */
-        .wave.state-1 { top: 40%; animation: rotate 6s infinite linear; }
-        .wave.state-2 { top: 60%; background: rgba(112, 0, 255, 0.3); animation: rotate 10s infinite linear reverse; }
-        
+        .wave.state-1 {
+            top: 40%;
+            animation: rotate 6s infinite linear;
+        }
+
+        .wave.state-2 {
+            top: 60%;
+            background: rgba(112, 0, 255, 0.3);
+            animation: rotate 10s infinite linear reverse;
+        }
+
         @keyframes rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
         }
 
         /* --- Footer --- */
@@ -411,20 +429,43 @@
 
         /* --- Animations Keyframes --- */
         @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         /* Mobile Responsiveness */
         @media (max-width: 768px) {
-            .navbar { padding: 0 20px; }
-            .nav-links { display: none; } /* Simplified for demo, ideally hamburger menu */
-            .hero h1 { font-size: 2.5rem; }
-            .interactive-grid { grid-template-columns: 1fr; }
-            .bar-group { width: 15%; }
+            .navbar {
+                padding: 0 20px;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            /* Simplified for demo, ideally hamburger menu */
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .interactive-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .bar-group {
+                width: 15%;
+            }
         }
     </style>
 </head>
+
 <body>
 
     <!-- Navigation -->
@@ -434,6 +475,7 @@
             <a href="Analysis-1.html" class="nav-item">Analysis 1</a>
             <a href="Analysis-2.html" class="nav-item">Analysis 2</a>
             <a href="Analysis-3.html" class="nav-item">Analysis 3</a>
+            <a href="Calculator.html" class="nav-item">Calculator</a>
         </div>
     </nav>
 
@@ -468,7 +510,8 @@
                     <div class="circle-chart">
                         <svg>
                             <circle class="circle-bg" cx="60" cy="60" r="45"></circle>
-                            <circle class="circle-progress" data-percent="62" cx="60" cy="60" r="45" style="stroke: var(--accent-secondary);"></circle>
+                            <circle class="circle-progress" data-percent="62" cx="60" cy="60" r="45"
+                                style="stroke: var(--accent-secondary);"></circle>
                         </svg>
                         <div class="stat-value">0%</div>
                     </div>
@@ -479,7 +522,8 @@
                     <div class="circle-chart">
                         <svg>
                             <circle class="circle-bg" cx="60" cy="60" r="45"></circle>
-                            <circle class="circle-progress" data-percent="94" cx="60" cy="60" r="45" style="stroke: #ff0055;"></circle>
+                            <circle class="circle-progress" data-percent="94" cx="60" cy="60" r="45"
+                                style="stroke: #ff0055;"></circle>
                         </svg>
                         <div class="stat-value">0%</div>
                     </div>
@@ -547,10 +591,10 @@
          */
         const canvas = document.getElementById('hero-canvas');
         const ctx = canvas.getContext('2d');
-        
+
         let width, height;
         let particles = [];
-        
+
         // Configuration
         const particleCount = 60;
         const connectionDistance = 150;
@@ -630,7 +674,7 @@
         // Animation Loop
         function animateCanvas() {
             ctx.clearRect(0, 0, width, height);
-            
+
             for (let i = 0; i < particles.length; i++) {
                 particles[i].update();
                 particles[i].draw();
@@ -670,12 +714,12 @@
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('active');
-                    
+
                     // Specific Logic for Circular Charts
                     if (entry.target.querySelector('.circle-progress')) {
                         animateCircles(entry.target);
                     }
-                    
+
                     // Specific Logic for Bar Charts
                     if (entry.target.querySelector('.bar')) {
                         animateBars(entry.target);
@@ -709,10 +753,10 @@
                 function updateNumber(currentTime) {
                     const elapsed = currentTime - startTime;
                     const progress = Math.min(elapsed / duration, 1);
-                    
+
                     // Ease out quart
                     const ease = 1 - Math.pow(1 - progress, 4);
-                    
+
                     const currentVal = Math.floor(start + (percent - start) * ease);
                     valueDiv.textContent = currentVal + '%';
 
@@ -745,8 +789,8 @@
 
             wave.className = 'wave'; // Reset
             // Force reflow
-            void wave.offsetWidth; 
-            
+            void wave.offsetWidth;
+
             if (mode === 1) {
                 wave.classList.add('state-1');
             } else {
@@ -755,4 +799,5 @@
         }
     </script>
 </body>
+
 </html>

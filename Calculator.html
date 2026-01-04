@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator | DataVision</title>
+    <style>
+        /* --- CSS Variables & Reset (Start of shared styles) --- */
+        :root {
+            --bg-deep: #020024;
+            --bg-mid: #090979;
+            --bg-light: #00d4ff;
+            --accent: #00f2ff;
+            --accent-secondary: #7000ff;
+            --text-main: #ffffff;
+            --text-muted: #b0b0d0;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --nav-height: 70px;
+            --font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background: linear-gradient(135deg, var(--bg-deep) 0%, var(--bg-mid) 50%, #1c1c4e 100%);
+            color: var(--text-main);
+            overflow-x: hidden;
+            min-height: 100vh;
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+            transition: color 0.3s ease;
+        }
+
+        /* --- Sticky Navigation --- */
+        .navbar {
+            position: sticky;
+            top: 0;
+            width: 100%;
+            height: var(--nav-height);
+            background: rgba(2, 0, 36, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--glass-border);
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 5%;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--accent), #ffffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 1px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-item {
+            position: relative;
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            padding: 5px 0;
+        }
+
+        .nav-item:hover {
+            color: var(--accent);
+        }
+
+        /* Underline animation */
+        .nav-item::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--accent);
+            transition: width 0.3s ease;
+        }
+
+        .nav-item:hover::after {
+            width: 100%;
+        }
+
+        .nav-item.active {
+            color: var(--accent);
+        }
+
+        .nav-item.active::after {
+            width: 100%;
+        }
+
+        /* --- Footer --- */
+        footer {
+            background: rgba(2, 0, 36, 0.95);
+            padding: 40px 0;
+            text-align: center;
+            border-top: 1px solid var(--glass-border);
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-top: auto;
+        }
+
+        /* --- End of shared styles --- */
+
+        /* --- Calculator Specific Styles --- */
+        main {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+            position: relative;
+        }
+
+        /* Background graphics */
+        .bg-blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: 0;
+            opacity: 0.4;
+        }
+
+        .blob-1 {
+            width: 300px;
+            height: 300px;
+            background: var(--accent);
+            top: 20%;
+            left: 20%;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .blob-2 {
+            width: 250px;
+            height: 250px;
+            background: var(--accent-secondary);
+            bottom: 20%;
+            right: 20%;
+            animation: float 8s ease-in-out infinite reverse;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translate(0, 0);
+            }
+
+            50% {
+                transform: translate(30px, -30px);
+            }
+
+            100% {
+                transform: translate(0, 0);
+            }
+        }
+
+        .calculator-container {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 30px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            width: 100%;
+            max-width: 400px;
+            z-index: 10;
+        }
+
+        .display-container {
+            margin-bottom: 20px;
+        }
+
+        #display {
+            width: 100%;
+            height: 80px;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            text-align: right;
+            padding: 20px;
+            font-size: 2.5rem;
+            color: var(--text-main);
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+        }
+
+        #history {
+            text-align: right;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            height: 20px;
+            margin-bottom: 5px;
+            padding-right: 5px;
+        }
+
+        .buttons-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+
+        button {
+            padding: 20px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.25rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-main);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        button:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .btn-op {
+            color: var(--accent);
+            background: rgba(0, 242, 255, 0.1);
+        }
+
+        .btn-op:hover {
+            background: rgba(0, 242, 255, 0.2);
+        }
+
+        .btn-eq {
+            background: linear-gradient(135deg, var(--accent-secondary), var(--bg-mid));
+            grid-column: span 2;
+            color: white;
+        }
+
+        .btn-eq:hover {
+            filter: brightness(1.2);
+        }
+
+        .btn-clear {
+            color: #ff4d4d;
+            background: rgba(255, 77, 77, 0.1);
+        }
+
+        .btn-clear:hover {
+            background: rgba(255, 77, 77, 0.2);
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 0 20px;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            /* Simplified for demo */
+            .calculator-container {
+                padding: 20px;
+            }
+
+            button {
+                padding: 15px;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="logo">DataVision</div>
+        <div class="nav-links">
+            <a href="Analysis-1.html" class="nav-item">Analysis 1</a>
+            <a href="Analysis-2.html" class="nav-item">Analysis 2</a>
+            <a href="Analysis-3.html" class="nav-item">Analysis 3</a>
+            <a href="Calculator.html" class="nav-item active">Calculator</a>
+        </div>
+    </nav>
+
+    <div class="bg-blob blob-1"></div>
+    <div class="bg-blob blob-2"></div>
+
+    <main>
+        <div class="calculator-container">
+            <div class="display-container">
+                <div id="history"></div>
+                <div id="display">0</div>
+            </div>
+            <div class="buttons-grid">
+                <button class="btn-clear" onclick="clearDisplay()">AC</button>
+                <button class="btn-clear" onclick="deleteLast()">DEL</button>
+                <button class="btn-op" onclick="appendOperator('%')">%</button>
+                <button class="btn-op" onclick="appendOperator('/')">÷</button>
+
+                <button onclick="appendNumber('7')">7</button>
+                <button onclick="appendNumber('8')">8</button>
+                <button onclick="appendNumber('9')">9</button>
+                <button class="btn-op" onclick="appendOperator('*')">×</button>
+
+                <button onclick="appendNumber('4')">4</button>
+                <button onclick="appendNumber('5')">5</button>
+                <button onclick="appendNumber('6')">6</button>
+                <button class="btn-op" onclick="appendOperator('-')">-</button>
+
+                <button onclick="appendNumber('1')">1</button>
+                <button onclick="appendNumber('2')">2</button>
+                <button onclick="appendNumber('3')">3</button>
+                <button class="btn-op" onclick="appendOperator('+')">+</button>
+
+                <button onclick="appendNumber('.')">.</button>
+                <button onclick="appendNumber('0')">0</button>
+                <button class="btn-eq" onclick="calculate()">=</button>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2023 DataVision Analytics. All rights reserved.</p>
+    </footer>
+
+    <script>
+        let currentInput = '0';
+        let previousInput = '';
+        let operator = null;
+        let shouldResetScreen = false;
+
+        const display = document.getElementById('display');
+        const history = document.getElementById('history');
+
+        function updateDisplay() {
+            display.textContent = currentInput;
+            if (operator != null) {
+                history.textContent = `${previousInput} ${operator}`;
+            } else {
+                history.textContent = '';
+            }
+        }
+
+        function appendNumber(number) {
+            if (currentInput === '0' || shouldResetScreen) {
+                resetScreen();
+            }
+            if (number === '.' && currentInput.includes('.')) return;
+            currentInput += number;
+            updateDisplay();
+        }
+
+        function resetScreen() {
+            currentInput = '';
+            shouldResetScreen = false;
+        }
+
+        function clearDisplay() {
+            currentInput = '0';
+            previousInput = '';
+            operator = null;
+            updateDisplay();
+        }
+
+        function deleteLast() {
+            currentInput = currentInput.toString().slice(0, -1);
+            if (currentInput === '') currentInput = '0';
+            updateDisplay();
+        }
+
+        function appendOperator(op) {
+            if (operator !== null) calculate();
+            previousInput = currentInput;
+            operator = op;
+            shouldResetScreen = true;
+            updateDisplay();
+        }
+
+        function calculate() {
+            if (operator === null || shouldResetScreen) return;
+            let result;
+            const prev = parseFloat(previousInput);
+            const current = parseFloat(currentInput);
+            if (isNaN(prev) || isNaN(current)) return;
+
+            switch (operator) {
+                case '+':
+                    result = prev + current;
+                    break;
+                case '-':
+                    result = prev - current;
+                    break;
+                case '*':
+                    result = prev * current;
+                    break;
+                case '/':
+                    if (current === 0) {
+                        alert("Cannot divide by zero!");
+                        return;
+                    }
+                    result = prev / current;
+                    break;
+                case '%':
+                    result = prev % current;
+                    break;
+                default:
+                    return;
+            }
+            currentInput = Math.round(result * 1000000) / 1000000; // avoid floating point errors
+            operator = null;
+            updateDisplay();
+            shouldResetScreen = true;
+        }
+
+        // Keyboard support
+        window.addEventListener('keydown', (e) => {
+            if (e.key >= 0 && e.key <= 9) appendNumber(e.key);
+            if (e.key === '.') appendNumber(e.key);
+            if (e.key === '=' || e.key === 'Enter') calculate();
+            if (e.key === 'Backspace') deleteLast();
+            if (e.key === 'Escape') clearDisplay();
+            if (e.key === '+' || e.key === '-' || e.key === '*' || e.key === '/') appendOperator(e.key);
+        });
+
+    </script>
+</body>
+
+</html>
